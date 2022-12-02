@@ -17,7 +17,7 @@ public class CodeWriter implements AutoCloseable {
   }
 
   public void writeCommand(Command command) throws IOException {
-    writer.write(command.toVMCode(file.getName().replace(".asm", "")));
+    writer.write(command.toHackCode(file.getName().replace(".asm", "")));
   }
 
   @Override

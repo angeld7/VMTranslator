@@ -7,7 +7,7 @@ public class Pop extends MemoryAccess {
   }
 
   @Override
-  public String toVMCode(String fileName) {
+  public String toHackCode(String fileName) {
     return
         getSegmentAccessCommands(fileName, false) +
         line("D=A") +

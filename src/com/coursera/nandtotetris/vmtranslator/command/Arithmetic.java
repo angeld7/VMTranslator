@@ -8,7 +8,7 @@ public abstract class Arithmetic implements Command {
 
   public abstract boolean twoOperands();
 
-  public String toVMCode(String fileName) {
+  public String toHackCode(String fileName) {
     return line("@SP") +
         line("AM=M-1") +
         (twoOperands() ?

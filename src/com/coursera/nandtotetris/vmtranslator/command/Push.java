@@ -7,7 +7,7 @@ public class Push extends MemoryAccess {
   }
 
   @Override
-  public String toVMCode(String fileName) {
+  public String toHackCode(String fileName) {
     return getSegmentAccessCommands(fileName, true) +
         line("@SP") +
         line("A=M") +
