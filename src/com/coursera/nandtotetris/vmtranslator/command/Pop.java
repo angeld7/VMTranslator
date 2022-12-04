@@ -1,23 +1,26 @@
 package com.coursera.nandtotetris.vmtranslator.command;
 
 public class Pop extends MemoryAccess {
+  private final String fileName;
 
-  protected Pop(String segment, int value) {
+  protected Pop(String segment, int value, String fileName) {
     super(segment, value);
+    this.fileName = fileName;
   }
 
   @Override
-  public String toHackCode(String fileName) {
+  public String toHackCode() {
     return
         getSegmentAccessCommands(fileName, false) +
-        line("D=A") +
-        line("@R13") +
-        line("M=D") +
-        line("@SP") +
-        line("AM=M-1") +
-        line("D=M") +
-        line("@R13") +
-        line("A=M") +
-        line("M=D");
+        lines("D=A",
+            "@R13",
+            "M=D",
+            "@SP",
+            "AM=M-1",
+            "D=M",
+            "@R13",
+            "A=M",
+            "M=D"
+        );
   }
 }

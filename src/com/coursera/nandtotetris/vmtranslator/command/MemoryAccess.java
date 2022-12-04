@@ -25,16 +25,16 @@ public abstract class MemoryAccess implements Command {
         code = getBasicAccessCommand("THAT");
         break;
       case "static":
-        code = line("@" + fileName + "." + value);
+        code = lines("@" + fileName + "." + value);
         break;
       case "temp":
-        code = line("@" + (5 + value));
+        code = lines("@" + (5 + value));
         break;
       case "pointer":
         if (value == 0) {
-          code = line("@THIS");
+          code = lines("@THIS");
         } else if (value == 1) {
-          code = line("@THAT");
+          code = lines("@THAT");
         } else {
           throw new IllegalArgumentException("pointer value can only be 0 or 1");
         }
@@ -43,21 +43,20 @@ public abstract class MemoryAccess implements Command {
         if (!moveToD) {
           throw new IllegalArgumentException("A constant cannot be written to.");
         }
-        code = line("@" + value) +
-            line("D=A");
+        code = lines("@" + value, "D=A");
         moveToD = false;
     }
     if (moveToD) {
-      code += line("D=M");
+      code += lines("D=M");
     }
     return code;
   }
 
   private String getBasicAccessCommand(String segment) {
-    return line("@" + value) +
-        line("D=A") +
-        line("@" + segment) +
-        line("A=D+M");
+    return lines("@" + value,
+        "D=A",
+        "@" + segment,
+        "A=D+M");
   }
 
 }

@@ -8,33 +8,33 @@ public abstract class Arithmetic implements Command {
 
   public abstract boolean twoOperands();
 
-  public String toHackCode(String fileName) {
-    return line("@SP") +
-        line("AM=M-1") +
+  public String toHackCode() {
+    return lines("@SP",
+        "AM=M-1") +
         (twoOperands() ?
-            line("D=M") +
-                line("@SP") +
-                line("AM=M-1")
+            lines("D=M",
+                "@SP",
+                "AM=M-1")
             : "") +
         writeOperation() +
-        line("@SP") +
-        line("M=M+1");
+        lines("@SP",
+            "M=M+1");
   }
 
   protected String booleanExpression(String jumpCommand) {
     String isTrue = VMUtils.getNextLabel();
     String end = VMUtils.getNextLabel();
-    return line("@" + isTrue) +
-        line(jumpCommand) +
-        line("@SP") +
-        line("A=M") +
-        line("M=0") +
-        line("@" + end) +
-        line("0;JMP") +
-        line("(" + isTrue + ")") +
-        line("@SP") +
-        line("A=M") +
-        line("M=-1") +
-        line("(" + end + ")");
+    return lines("@" + isTrue,
+        jumpCommand,
+        "@SP",
+        "A=M",
+        "M=0",
+        "@" + end,
+        "0;JMP",
+        "(" + isTrue + ")",
+        "@SP",
+        "A=M",
+        "M=-1",
+        "(" + end + ")");
   }
 }

@@ -3,7 +3,7 @@ package com.coursera.nandtotetris.vmtranslator.command;
 public class Lt extends Arithmetic {
   @Override
   protected String writeOperation() {
-    return line("D=D-M") +
+    return lines("D=D-M") +
         booleanExpression("D;JGT");
   }
 

@@ -3,14 +3,14 @@ package com.coursera.nandtotetris.vmtranslator.command;
 public class CommandFactory {
 
 
-  public static Command buildCommand(String[] line) {
+  public static Command buildCommand(String[] line, String fileName) {
     Command command;
     switch (line[0]) {
       case "push":
-        command = new Push(line[1], Integer.parseInt(line[2]));
+        command = new Push(line[1], Integer.parseInt(line[2]), fileName);
         break;
       case "pop":
-        command = new Pop(line[1], Integer.parseInt(line[2]));
+        command = new Pop(line[1], Integer.parseInt(line[2]), fileName);
         break;
       case "add":
         command = new Add();
@@ -38,6 +38,18 @@ public class CommandFactory {
         break;
       case "not":
         command = new Not();
+        break;
+      case "goto":
+        command = new Goto(line[1]);
+        break;
+      case "if-goto":
+        command = new IfGoto(line[1]);
+        break;
+      case "label":
+        command = new Label(line[1]);
+        break;
+      case "call":
+        command = new Call(line[1], line[2]);
         break;
       default:
         throw new IllegalArgumentException("Command not recognized: " + line[0]);

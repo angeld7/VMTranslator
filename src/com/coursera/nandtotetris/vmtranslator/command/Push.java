@@ -2,17 +2,21 @@ package com.coursera.nandtotetris.vmtranslator.command;
 
 public class Push extends MemoryAccess {
 
-  protected Push(String segment, int value) {
+  private final String fileName;
+
+  protected Push(String segment, int value, String fileName) {
     super(segment, value);
+    this.fileName = fileName;
   }
 
   @Override
-  public String toHackCode(String fileName) {
+  public String toHackCode() {
     return getSegmentAccessCommands(fileName, true) +
-        line("@SP") +
-        line("A=M") +
-        line("M=D") +
-        line("@SP") +
-        line("M=M+1");
+        lines("@SP",
+            "A=M",
+            "M=D",
+            "@SP",
+            "M=M+1"
+        );
   }
 }
