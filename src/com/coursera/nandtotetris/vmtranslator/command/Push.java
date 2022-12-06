@@ -10,10 +10,9 @@ public class Push extends MemoryAccess {
   public String toHackCode() {
     return getSegmentAccessCommands(true) +
         lines("@SP",
-            "A=M",
-            "M=D",
-            "@SP",
-            "M=M+1"
+            "M=M+1",
+            "A=M-1",
+            "M=D"
         );
   }
 }

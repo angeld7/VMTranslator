@@ -6,8 +6,8 @@ public class Return extends Command{
     return lines(
         "@5",
         "D=A",
-        "@ARG",
-        "D=A-D",
+        "@LCL",
+        "D=M-D",
         "@R13",
         "M=D",
         "@SP",
