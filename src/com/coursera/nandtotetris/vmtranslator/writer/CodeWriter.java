@@ -18,7 +18,7 @@ public class CodeWriter implements AutoCloseable {
       if (inputFileName.endsWith(File.separator)) {
         fileName = inputFileName + beforeLastSeparator.substring(inputFileName.lastIndexOf(File.separator) + 1);
       } else if (multiFile) {
-        fileName = inputFileName + File.separator + inputFileName.substring(beforeLastSeparator.length());
+        fileName = inputFileName + inputFileName.substring(beforeLastSeparator.length());
       }
     }
     fileName += ".asm";
@@ -35,12 +35,11 @@ public class CodeWriter implements AutoCloseable {
   }
 
   public void writeCommand(Command command) throws IOException {
-    writer.write(command.toHackCode());
+    writer.write(command.getHackCode());
   }
 
   @Override
   public void close() throws Exception {
-    writer.write("(END)\n@END\n0;JMP");
     writer.close();
     System.out.println("Created file: " + fileName);
   }

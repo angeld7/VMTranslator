@@ -1,6 +1,6 @@
 package com.coursera.nandtotetris.vmtranslator.command;
 
-public class Goto implements Command {
+public class Goto extends Command {
 
   private final String label;
 
@@ -10,7 +10,7 @@ public class Goto implements Command {
 
   @Override
   public String toHackCode() {
-    return lines("@" + label,
+    return lines("@" + Command.getCurrentFunctionPrefix() + label,
         "0;JMP");
   }
 }

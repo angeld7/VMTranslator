@@ -1,6 +1,6 @@
 package com.coursera.nandtotetris.vmtranslator.command;
 
-public abstract class MemoryAccess implements Command {
+public abstract class MemoryAccess extends Command {
   protected final String segment;
   protected final int value;
 
@@ -9,7 +9,7 @@ public abstract class MemoryAccess implements Command {
     this.value = value;
   }
 
-  protected String getSegmentAccessCommands(String fileName, boolean moveToD) {
+  protected String getSegmentAccessCommands(boolean moveToD) {
     String code = "";
     switch (segment) {
       case "local":
@@ -25,7 +25,7 @@ public abstract class MemoryAccess implements Command {
         code = getBasicAccessCommand("THAT");
         break;
       case "static":
-        code = lines("@" + fileName + "." + value);
+        code = lines("@" + Command.getCurrentFile() + "." + value);
         break;
       case "temp":
         code = lines("@" + (5 + value));

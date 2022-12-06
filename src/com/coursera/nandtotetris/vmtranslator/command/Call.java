@@ -1,8 +1,10 @@
 package com.coursera.nandtotetris.vmtranslator.command;
 
-import com.coursera.nandtotetris.vmtranslator.util.VMUtils;
+public class Call extends Command {
 
-public class Call implements Command {
+  private static String lastFunction = "";
+  private static int labelCounter = 0;
+
   private final String functionName;
   private final String numArgs;
 
@@ -13,9 +15,9 @@ public class Call implements Command {
 
   @Override
   public String toHackCode() {
-    String returnLabel = "RETURN_" + VMUtils.getNextLabel();
+    String returnLabel = getNextLabel();
     return lines("@" + returnLabel,
-        "A=D",
+        "D=A",
         "@SP",
         "A=M",
         "M=D",
@@ -40,17 +42,24 @@ public class Call implements Command {
         "AM=M+1",
         "M=D",
         "@SP",
-        "DM=M+1",
+        "MD=M+1",
+        "@LCL",
+        "M=D",
         "@" + (5 + Integer.parseInt(numArgs)),
         "D=D-A",
         "@ARG",
         "M=D",
-        "@SP",
-        "M=A",
-        "@LCL",
-        "M=D",
         "@" + functionName,
         "0;JMP",
         "(" + returnLabel + ")");
+  }
+
+  public String getNextLabel() {
+    String function = Command.getCurrentFunctionPrefix();
+    if (!lastFunction.equals(function)) {
+      labelCounter = 0;
+      lastFunction = function;
+    }
+    return function + "ret." + labelCounter++;
   }
 }

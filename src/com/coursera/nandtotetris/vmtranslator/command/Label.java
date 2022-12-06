@@ -1,6 +1,6 @@
 package com.coursera.nandtotetris.vmtranslator.command;
 
-public class Label implements Command{
+public class Label extends Command{
 
   private final String label;
 
@@ -10,6 +10,6 @@ public class Label implements Command{
 
   @Override
   public String toHackCode() {
-    return lines("(" + label + ")");
+    return lines("(" + Command.getCurrentFunctionPrefix() + label + ")");
   }
 }

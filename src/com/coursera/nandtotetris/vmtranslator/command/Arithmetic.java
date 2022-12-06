@@ -1,8 +1,9 @@
 package com.coursera.nandtotetris.vmtranslator.command;
 
-import com.coursera.nandtotetris.vmtranslator.util.VMUtils;
+public abstract class Arithmetic extends Command {
 
-public abstract class Arithmetic implements Command {
+  private static String lastFunction = "";
+  private static int labelCounter = 0;
 
   protected abstract String writeOperation();
 
@@ -22,8 +23,8 @@ public abstract class Arithmetic implements Command {
   }
 
   protected String booleanExpression(String jumpCommand) {
-    String isTrue = VMUtils.getNextLabel();
-    String end = VMUtils.getNextLabel();
+    String isTrue = getNextLabel("BooleanExpression#", false);
+    String end = getNextLabel("BooleanExpression#End", true);
     return lines("@" + isTrue,
         jumpCommand,
         "@SP",
@@ -36,5 +37,18 @@ public abstract class Arithmetic implements Command {
         "A=M",
         "M=-1",
         "(" + end + ")");
+  }
+
+  private static String getNextLabel(String name, boolean increaseCounter) {
+    String function = Command.getCurrentFunctionPrefix();
+    if (!lastFunction.equals(function)) {
+      labelCounter = 0;
+      lastFunction = function;
+    }
+    String label = function + name.replaceAll("#", String.valueOf(labelCounter));
+    if (increaseCounter) {
+      labelCounter++;
+    }
+    return label;
   }
 }

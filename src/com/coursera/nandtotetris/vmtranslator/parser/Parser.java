@@ -2,6 +2,7 @@ package com.coursera.nandtotetris.vmtranslator.parser;
 
 import com.coursera.nandtotetris.vmtranslator.command.Command;
 import com.coursera.nandtotetris.vmtranslator.command.CommandFactory;
+import com.coursera.nandtotetris.vmtranslator.command.UnformattedLine;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,6 +18,7 @@ public class Parser implements AutoCloseable {
   private BufferedReader currentReader;
   private String currentFileName;
   private String line;
+  private String lineUnformatted;
   private boolean isMultiFile = false;
 
   public Parser(String inputFileName) throws IOException {
@@ -56,7 +58,9 @@ public class Parser implements AutoCloseable {
 
   private void directoryToBufferedReaders(File directory) throws FileNotFoundException {
     File[] files = directory.listFiles();
-    if (files == null) return;
+    if (files == null) {
+      return;
+    }
     for (File file : files) {
       if (file.isDirectory()) {
         directoryToBufferedReaders(file);
@@ -81,20 +85,24 @@ public class Parser implements AutoCloseable {
       line = currentReader.readLine();
       return hasMoreCommand();
     }
-    String lineFormatted = line.trim();
-    if (lineFormatted.startsWith("//")) {
-      line = "";
-    }
-    if ("".equals(line)) {
-      line = currentReader.readLine();
-      return hasMoreCommand();
-    }
     return true;
   }
 
   public Command parseNext() throws IOException {
-    String commandString = line.split("//")[0];
-    Command command = CommandFactory.buildCommand(commandString.split(" "), currentFileName);
+    Command command;
+    if (line.startsWith("//") || "".equals(line.trim())) {
+      command = new UnformattedLine(line);
+    } else {
+      String[] split = line.split("//");
+      String commandString = split[0];
+      String comment = split.length > 1 ? " " + split[1] : "";
+      String[] tokens = commandString.split(" ");
+      for (int i = 0; i < tokens.length; i++) {
+        tokens[i] = tokens[i].trim();
+      }
+      command = CommandFactory.buildCommand(tokens, currentFileName);
+      command.setComment(comment);
+    }
     line = currentReader.readLine();
     return command;
   }

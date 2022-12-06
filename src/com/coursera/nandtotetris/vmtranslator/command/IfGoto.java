@@ -1,6 +1,6 @@
 package com.coursera.nandtotetris.vmtranslator.command;
 
-public class IfGoto implements Command {
+public class IfGoto extends Command {
 
   private final String label;
 
@@ -14,7 +14,7 @@ public class IfGoto implements Command {
     return lines("@SP",
         "AM=M-1",
         "D=M",
-        "@" + label,
+        "@" + Command.getCurrentFunctionPrefix() + label,
         "D;JNE");
   }
 }
